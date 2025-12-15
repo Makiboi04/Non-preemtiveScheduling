@@ -5,14 +5,13 @@
 }
 
 :root {
-  /* Black and white theme for light mode with enhanced contrast */
+
   --bg-primary: #ffffff;
   --bg-secondary: #f5f5f5;
   --bg-tertiary: #e8e8e8;
   --text-primary: #000000;
   --text-secondary: #333333;
   --text-tertiary: #666666;
-  /* Changed border color from #cccccc to #666666 for much better visibility in light mode */
   --border-color: #666666;
   --border-hover: #333333;
   --sidebar-width: 380px;
@@ -73,7 +72,6 @@ body {
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-secondary);
-  /* Enhanced border visibility for light mode */
   border-right: 3px solid var(--border-color);
   padding: 24px;
   overflow-y: auto;
@@ -116,7 +114,7 @@ body {
   border-bottom: 3px solid var(--border-color);
 }
 
-/* Enhanced header with black and white gradient for light mode */
+
 .header-left h1 {
   font-size: 32px;
   font-weight: 800;
@@ -163,7 +161,7 @@ button {
   overflow: hidden;
 }
 
-/* Enhanced button ripple effect animation */
+
 button::before {
   content: "";
   position: absolute;
@@ -456,7 +454,7 @@ select:hover {
   gap: 6px;
 }
 
-/* Simulation Controls */
+
 .simulation-controls {
   display: flex;
   gap: 12px;
@@ -488,7 +486,7 @@ select:hover {
   color: var(--text-primary);
 }
 
-/* Enhanced slider styling */
+
 #speedSlider {
   width: 140px;
   height: 8px;
@@ -524,7 +522,7 @@ select:hover {
   font-size: 16px;
 }
 
-/* Visualization */
+
 .visualization {
   background: var(--bg-secondary);
   border-radius: var(--radius-lg);
@@ -542,7 +540,7 @@ select:hover {
   margin-bottom: 36px;
 }
 
-/* Enhanced clock with black and white gradient for light mode */
+
 .clock {
   text-align: center;
   padding: 32px 64px;
@@ -567,7 +565,7 @@ body.dark-mode .clock {
   color: rgba(255, 255, 255, 0.95);
 }
 
-/* Enhanced clock value with scale animation */
+
 .clock-value {
   font-size: 56px;
   font-weight: 900;
@@ -599,7 +597,7 @@ body.dark-mode .clock {
   animation: pulse 1s ease-in-out infinite;
 }
 
-/* Queue Container */
+
 .queue-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -607,7 +605,7 @@ body.dark-mode .clock {
   margin-bottom: 36px;
 }
 
-/* Enhanced queue styling with better borders */
+
 .queue {
   min-height: 200px;
   background: var(--bg-primary);
@@ -677,7 +675,7 @@ body.dark-mode .queue-count {
   min-height: 90px;
 }
 
-/* Enhanced process block with better animations */
+
 .process-block {
   padding: 18px 24px;
   border-radius: var(--radius-md);
@@ -725,7 +723,7 @@ body.dark-mode .queue-count {
   font-weight: 700;
 }
 
-/* Enhanced CPU executing animation */
+
 .cpu-executing {
   animation: pulseExecuting 1.2s ease-in-out infinite, glowIntense 1.5s ease-in-out infinite;
 }
@@ -740,7 +738,7 @@ body.dark-mode .queue-count {
   font-weight: 600;
 }
 
-/* Gantt Chart */
+
 .gantt-chart {
   background: var(--bg-primary);
   border-radius: var(--radius-lg);
@@ -790,7 +788,7 @@ body.dark-mode .queue-count {
   box-shadow: var(--shadow-sm);
 }
 
-/* Enhanced gantt cell with better hover effects */
+
 .gantt-cell {
   height: 100%;
   display: flex;
@@ -827,7 +825,7 @@ body.dark-mode .queue-count {
   color: var(--text-primary);
 }
 
-/* Legend */
+
 .legend {
   display: flex;
   flex-wrap: wrap;
@@ -840,7 +838,7 @@ body.dark-mode .queue-count {
   box-shadow: var(--shadow-sm);
 }
 
-/* Enhanced legend items with hover effects */
+
 .legend-item {
   display: flex;
   align-items: center;
@@ -907,7 +905,7 @@ td {
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Enhanced table header */
+
 th {
   background: var(--bg-tertiary);
   font-weight: 800;
@@ -940,7 +938,7 @@ td {
   font-weight: 600;
 }
 
-/* Enhanced table row animations */
+
 tbody tr {
   transition: var(--transition);
   animation: fadeIn 0.4s ease;
@@ -960,7 +958,7 @@ tbody tr:nth-child(even):hover {
   background: var(--bg-tertiary);
 }
 
-/* Averages */
+
 .averages {
   margin-top: 36px;
   display: grid;
@@ -968,7 +966,7 @@ tbody tr:nth-child(even):hover {
   gap: 24px;
 }
 
-/* Enhanced average card with better shadows and animations */
+
 .average-card {
   background: linear-gradient(135deg, var(--bg-primary), var(--bg-tertiary));
   padding: 32px;
@@ -1016,7 +1014,7 @@ body.dark-mode .average-card::before {
   letter-spacing: 1px;
 }
 
-/* Black and white gradient for average values in light mode */
+
 .average-value {
   font-size: 40px;
   font-weight: 900;
@@ -1040,7 +1038,7 @@ body.dark-mode .average-value {
   font-weight: 600;
 }
 
-/* Error */
+
 .error {
   background: #f5f5f5;
   border: 3px solid var(--text-primary);
@@ -1067,7 +1065,7 @@ body.dark-mode .average-value {
   border-color: var(--danger-color);
 }
 
-/* Enhanced animations */
+
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -1216,7 +1214,7 @@ body.dark-mode .average-value {
   }
 }
 
-/* Responsive Design */
+
 @media (max-width: 968px) {
   .container {
     flex-direction: column;

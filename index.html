@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Process Management</h2>
+                <!-- Removed toggle sidebar button -->
+            </div>
+            
+            <div id="errorContainer"></div>
+
+            <div class="form-section">
+                <div class="input-group">
+                    <label for="processId">Process ID</label>
+                    <input type="text" id="processId" placeholder="e.g., P1">
+                </div>
+
+                <div class="input-group">
+                    <label for="arrivalTime">Arrival Time</label>
+                    <input type="number" id="arrivalTime" min="0" value="0" placeholder="0">
+                </div>
+
+                <div class="input-group">
+                    <label for="burstTime">Burst Time</label>
+                    <input type="number" id="burstTime" min="1" value="1" placeholder="1">
+                </div>
+
+                <div class="input-group">
+                    <label for="priority">Priority (lower = higher priority)</label>
+                    <input type="number" id="priority" min="1" value="1" placeholder="1">
+                </div>
+
+                <button class="btn-primary btn-full" onclick="addProcess()">
+                    <span class="btn-icon-text">➕</span> Add Process
+                </button>
+            </div>
+
+            <div class="input-group">
+                <label for="algorithm">Scheduling Algorithm</label>
+                <select id="algorithm">
+                    <option value="fcfs">First-Come, First-Served (FCFS)</option>
+                    <option value="sjf">Shortest Job First (SJF)</option>
+                    <option value="priority">Priority Scheduling</option>
+                    <option value="rr">Round Robin (RR)</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="quantumGroup" style="display: none;">
+                <label for="timeQuantum">Time Quantum</label>
+                <input type="number" id="timeQuantum" min="1" value="2" placeholder="2">
+            </div>
+
+            <div class="process-list">
+                <div class="process-list-header">
+                    <h3>Processes (<span id="processCount">0</span>)</h3>
+                    <button class="btn-secondary btn-sm" onclick="clearAllProcesses()">Clear All</button>
+                </div>
+                <div id="processItems" class="process-items-container"></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="header">
+                <div class="header-left">
+                    <h1>CPU Scheduling Visualizer</h1>
+                    <p class="subtitle">Visualize and analyze CPU scheduling algorithms</p>
+                </div>
+                <div class="controls">
+                    <button class="btn-secondary btn-icon" onclick="undo()" id="undoBtn" title="Undo" disabled>
+                        <span class="icon">↶</span>
+                    </button>
+                    <button class="btn-secondary btn-icon" onclick="redo()" id="redoBtn" title="Redo" disabled>
+                        <span class="icon">↷</span>
+                    </button>
+                    <button class="theme-toggle btn-icon" onclick="toggleTheme()" title="Toggle Theme">
+                        <span class="icon" id="themeIcon">🌙</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="simulation-controls">
+                <button class="btn-success" onclick="startSimulation()" id="startBtn">
+                    <span class="btn-icon-text">▶</span> Start Simulation
+                </button>
+                <button class="btn-warning" onclick="pauseSimulation()" id="pauseBtn" disabled>
+                    <span class="btn-icon-text">⏸</span> Pause
+                </button>
+                <button class="btn-success" onclick="resumeSimulation()" id="resumeBtn" disabled>
+                    <span class="btn-icon-text">▶</span> Resume
+                </button>
+                <button class="btn-danger" onclick="resetSimulation()" id="resetBtn">
+                    <span class="btn-icon-text">🔄</span> Reset
+                </button>
+                
+                <div class="speed-control">
+                    <label for="speedSlider">Speed:</label>
+                    <input type="range" id="speedSlider" min="100" max="2000" value="1000" step="100">
+                    <span id="speedValue">1.0x</span>
+                </div>
+            </div>
+
+            <div class="visualization" id="visualization">
+                <div class="clock-container">
+                    <div class="clock">
+                        <span class="clock-label">Clock Time</span>
+                        <span class="clock-value" id="clock">0</span>
+                    </div>
+                    <span id="pausedIndicator" class="paused-indicator" style="display: none;">
+                        <span class="pulse-dot"></span> PAUSED
+                    </span>
+                </div>
+
+                <div class="queue-container">
+                    <div class="queue">
+                        <div class="queue-header">
+                            <span class="queue-icon">📋</span>
+                            <span class="queue-title">Ready Queue</span>
+                            <span class="queue-count" id="readyCount">0</span>
+                        </div>
+                        <div class="queue-items" id="readyQueue">
+                            <div class="empty-state">No processes in queue</div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue cpu-queue">
+                        <div class="queue-header">
+                            <span class="queue-icon">⚡</span>
+                            <span class="queue-title">CPU Execution</span>
+                        </div>
+                        <div class="queue-items" id="cpuExecution">
+                            <div class="empty-state">Idle</div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue">
+                        <div class="queue-header">
+                            <span class="queue-icon">✓</span>
+                            <span class="queue-title">Completed</span>
+                            <span class="queue-count" id="completedCount">0</span>
+                        </div>
+                        <div class="queue-items" id="completedQueue">
+                            <div class="empty-state">No completed processes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gantt-chart">
+                    <h3>Gantt Chart</h3>
+                    <div class="gantt-container" id="ganttChart">
+                        <div class="empty-state">Start simulation to see Gantt chart</div>
+                    </div>
+                </div>
+
+                <div class="legend" id="legend"></div>
+            </div>
+
+            <div class="results-table" id="resultsTable" style="display: none;">
+                <h2>Scheduling Results</h2>
+                <div class="table-container">
+                    <table id="resultsTableElement">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Process <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(1)">Arrival Time <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(2)">Burst Time <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(3)">Completion Time <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(4)">Turnaround Time <span class="sort-icon">↕</span></th>
+                                <th onclick="sortTable(5)">Waiting Time <span class="sort-icon">↕</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="averages">
+                    <div class="average-card">
+                        <div class="average-icon">⏱️</div>
+                        <div class="average-label">Average Waiting Time</div>
+                        <div class="average-value" id="avgWaitingTime">0.00</div>
+                        <div class="average-unit">time units</div>
+                    </div>
+                    <div class="average-card">
+                        <div class="average-icon">⏰</div>
+                        <div class="average-label">Average Turnaround Time</div>
+                        <div class="average-value" id="avgTurnaround">0.00</div>
+                        <div class="average-unit">time units</div>
+                    </div>
+                    <div class="average-card">
+                        <div class="average-icon">📊</div>
+                        <div class="average-label">CPU Utilization</div>
+                        <div class="average-value" id="cpuUtilization">0.00%</div>
+                        <div class="average-unit">efficiency</div>
+                    </div>
+                    <div class="average-card">
+                        <div class="average-icon">⚡</div>
+                        <div class="average-label">Throughput</div>
+                        <div class="average-value" id="throughput">0.00</div>
+                        <div class="average-unit">processes/unit</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
